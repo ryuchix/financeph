@@ -14,7 +14,7 @@ class AddNewColumnInUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-           $table->timestamp('last_login')->nullable();
+           $table->datetime('last_login')->nullable();
            $table->integer('online')->unsigned();
         });
     }

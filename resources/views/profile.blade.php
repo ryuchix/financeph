@@ -25,7 +25,7 @@
 		      <td>{{ $count }}</td>
 		      <td>{{ $user->name }}</td>
 		      <td>{{ $user->email }}</td>
-		      <td>{{ \Carbon\Carbon::createFromTimeStamp(strtotime($user->updated_at))->diffForHumans() }}</td>
+		      <td>{{ \Carbon\Carbon::createFromTimeStamp(strtotime($user->last_login))->diffForHumans() }}</td>
 		      <td>{{ $user->online == '1' ? 'Online' : 'Offline' }}
 		      </td>
 		    </tr>
