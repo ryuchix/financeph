@@ -27,3 +27,5 @@ Route::get('/register', 'UserController@showRegistrationForm');
 Route::post('/register', 'UserController@register');
 
 Route::get('/logout', 'UserController@logout');
+
+Route::resource('image', 'ImageController');

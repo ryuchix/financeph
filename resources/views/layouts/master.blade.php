@@ -1,5 +1,7 @@
 @include('snippets.header')
-
+@yield('style')
+</head>
+<body>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -20,7 +22,7 @@
             </div>
         </div>
 
-	@yield('script')
+	@yield('footer')
 
     </body>
 </html>

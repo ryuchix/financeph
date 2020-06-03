@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Carbon\Carbon;
 use Auth;
+use Image;
 
 class UserController extends Controller
 {
@@ -75,10 +76,11 @@ class UserController extends Controller
             'email' => 'required|string|email|max:191|unique:users,id',
         ]);
 
+        $users = User::all();
         $user = auth()->user();
         $user->update($request->all());
 
-        return view('profile', compact('user'));
+        return response()->json(['path' => $this->uploadImage($request->profile_image, $user->id), 'has_image' => $request->hasFile('profile_image')], 200);
     }
 
     public function checkEmail() {
@@ -86,6 +88,44 @@ class UserController extends Controller
             'email' => 'required|string|email|max:191|unique:users',
         ]);
 
-        return response()->json(['message' => 'Email available'], 200);  
+        return response()->json(['message' => 'Email available'], 200);
+    }
+
+    public function uploadImage($file, $id) {
+        if(request()->hasFile('profile_image')) {
+            //get filename with extension
+            $filenamewithextension = $file->getClientOriginalName();
+     
+            //get filename without extension
+            $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+     
+            //get file extension
+            $extension = $file->getClientOriginalExtension();
+     
+            //filename to store
+            $filenametostore = $filename.'_'.time().'.'.$extension;
+     
+            //Upload File
+            $file->storeAs('public/profile_images', $filenametostore);
+     
+            if(!file_exists(public_path('storage/profile_images/crop'))) {
+                mkdir(public_path('storage/profile_images/crop'), 0755);
+            }
+     
+            // crop image
+            $img = Image::make(public_path('storage/profile_images/'.$filenametostore));
+            $croppath = public_path('storage/profile_images/crop/'.$filenametostore);
+     
+            $img->crop(request()->input('w'), request()->input('h'), request()->input('x1'), request()->input('y1'));
+            $img->save($croppath);
+     
+            // you can save crop image path below in database
+            $path = asset('storage/profile_images/crop/'.$filenametostore);
+            $user = User::find($id);
+            $user->image = $filenametostore;
+            $user->save();
+     
+            return $path;
+        }
     }
 }

@@ -66,6 +66,5 @@
                 margin-bottom: 30px;
             }
         </style>
-    </head>
-    <body>
+
     	
