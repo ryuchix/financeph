@@ -117,7 +117,8 @@
 						$('#previewimage').Jcrop({
 							onSelect: showCoords,
 							onChange: resetCoords,
-							onRelease: resetCoords
+							onRelease: resetCoords,
+							setSelect:   [ 200, 200, 100, 100 ],
 					    },function() {
 					    	//
 					    });
@@ -159,8 +160,11 @@
                     $('.close').click();
                     $("#update-profile")[0].reset();
 
-                    $('#profile-image').attr('src', response.path);
-  
+  					if (response.has_image) {
+  						$('#profile-image').attr('src', response.path);
+  					} else {
+
+  					}
 					$('#previewimage').data('Jcrop', '');
 					$('.jcrop-holder').remove(); 
 					// $(​'.jcrop-holder').empty();
